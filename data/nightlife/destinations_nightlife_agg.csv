@@ -1,36 +1,13 @@
-destination,country,category,averageRating,totalReviews
-Bali,Indonesia,Bar,4.74,9938.0
-Bali,Indonesia,Club,4.92,280.0
-Bali,Indonesia,Food,4.7,1907.0
-Bali,Indonesia,Other,4.6,964.0
-Bangkok,Thailand,Bar,4.81,7881.0
-Bangkok,Thailand,Club,4.77,2224.0
-Bangkok,Thailand,Food,5.0,7.0
-Cancun,Mexico,Bar,4.5,7587.0
-Cancun,Mexico,Club,4.07,36.0
-Dubrovnik,Croatia,Bar,4.54,8885.0
-Dubrovnik,Croatia,Club,4.2,139.0
-Dubrovnik,Croatia,Food,4.7,451.0
-Dubrovnik,Croatia,Other,5.0,32.0
-Holetown,Barbados,Bar,4.41,2221.0
-Holetown,Barbados,Food,4.32,6027.0
-Holetown,Barbados,Other,5.0,2.0
-Ibiza,Spain,Bar,4.57,10835.0
-Ibiza,Spain,Club,3.8,4112.0
-Ibiza,Spain,Food,4.6,1067.0
-Maldives,Maldives,Bar,4.69,1478.0
-Maldives,Maldives,Club,3.6,22.0
-Maldives,Maldives,Food,4.7,158.0
-Miami,USA,Bar,4.38,33784.0
-Miami,USA,Food,4.8,47.0
-Miami,USA,Other,5.0,1048.0
-Mykonos,Greece,Bar,4.46,26726.0
-Mykonos,Greece,Club,3.87,1002.0
-Mykonos,Greece,Food,4.48,4987.0
-Phuket,Thailand,Bar,4.8,8085.0
-Phuket,Thailand,Club,4.72,15286.0
-Sal,Cape Verde,Bar,4.52,3699.0
-Sal,Cape Verde,Club,4.25,1617.0
-Sal,Cape Verde,Food,4.25,2666.0
-Tenerife,Spain,Bar,4.4,14197.0
-Tenerife,Spain,Food,4.33,4755.0
+destination,country,averageRating,totalReviews
+Bali,Indonesia,4.76,13089.0
+Bangkok,Thailand,4.81,10112.0
+Cancun,Mexico,4.46,7623.0
+Dubrovnik,Croatia,4.55,9507.0
+Holetown,Barbados,4.41,8250.0
+Ibiza,Spain,4.45,16014.0
+Maldives,Maldives,4.61,1658.0
+Miami,USA,4.41,34879.0
+Mykonos,Greece,4.4,32715.0
+Phuket,Thailand,4.79,23371.0
+Sal,Cape Verde,4.48,7982.0
+Tenerife,Spain,4.4,18952.0
