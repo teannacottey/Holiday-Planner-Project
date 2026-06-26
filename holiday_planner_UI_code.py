@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go  
+import json
 
 #import datasets 
 nightlife_chart = pd.read_csv("data/nightlife/destinations_nightlife_data.csv")
@@ -61,18 +62,9 @@ def load_destinations():
 
 destinations = load_destinations()
 
-#app introduction
-st.title('Holiday Planner App :beach_umbrella:')
-st.write("Welcome to the Holiday Planner App! Get holiday ready with our data and AI-driven destination recommendations.")
-st.write("To get started, let us know what kind of traveller you are...")
-st.divider()
-
-#customer profile - user input 
-st.header("What type of traveller are you?")
-
 #customer profiles dictionary - ADD FLIGHT WEIGHTS
 profiles = {
-     '**:money_with_wings: The Budgeter**': {
+     'The Budgeter': {
          'filters': {
              #'flightPrice': ('<=', 500)
              #'flightDuration': ('<=', 6)
@@ -83,7 +75,7 @@ profiles = {
              #'flightDuration': 0.4
          } #EDIT FLIGHT WEIGHTS
         }, 
-    '**:partying: The Party Seeker**': {
+    'The Party Seeker': {
         'filters': {},
         'weights': {
             'averageRating': 0.5, 
@@ -91,7 +83,7 @@ profiles = {
             'sunshineHours': 0.3
         }
     }, 
-    '**:beach_umbrella: The Beach Relaxer**': {
+    'The Beach Relaxer': {
         'filters': {
             'sunshineHours': ('>=', 9.5),
             'maxTemperature': ('>=', 23)
@@ -102,27 +94,6 @@ profiles = {
         }
     }
 }
-
-#preference checkboxes 
-profile = st.radio(
-    "Let us know so we can give the best recommendations for you!", 
-    ["**:money_with_wings: The Budgeter**", "**:partying: The Party Seeker**", "**:beach_umbrella: The Beach Relaxer**"],
-    captions=[
-        "Value for money is your priority. You prefer affordable stays and good nightlife without breaking the bank.",
-        "Nightlife is your priority. You prefer warm weather, lots of clubs and bars, and don’t mind travelling the extra mile.",
-        "Nightlife isn’t the priority for you. You prefer sun, warmth, clear skies, and calm conditions."
-    ]
-)
-
-if profile == "**:money_with_wings: The Budgeter**": 
-    st.write(f"You have selected: {profile}")
-    st.write("Nice! Who doesn't love a bit of budget-friendly fun. Getting your recommendations ready... :space_invader:")
-if profile == "**:partying: The Party Seeker**": 
-    st.write(f"You have selected: {profile}")
-    st.write("Great Choice! A little partying never hurt anybody. Getting your recommendations ready... :space_invader:")
-if profile == "**:beach_umbrella: The Beach Relaxer**": 
-    st.write(f"You have selected: {profile}")
-    st.write("Lovely! Time to kick back and relax. Getting your recommendations ready... :space_invader:")
 
 #destination score calculator  
 def get_top_3(profile): 
@@ -168,19 +139,92 @@ def get_top_3(profile):
     #return the top 3 destinations by score desc 
     return sorted(pot_dests, key=lambda x: x['score'], reverse=True)[:3]
 
+#export recommendation results function
+def export_results(top_3, profile):
+    """
+    Exports top 3 results to a JSON file for an AI written summary 
+    """
+    output = {
+        'profile': profile,
+        'recommendations': []
+    }
+
+    for result in top_3: 
+        output['recommendations'].append({
+            'destination': result['destination_name'], 
+            'score': result['score'], 
+            'data': result['data']
+        })
+
+    with open(f'recommendation_results({profile}).json', 'w') as file: 
+        json.dump(output, file, indent=4) #WRITE BUDGETER AFTER GETTING FLIGHT DATA
+
+#reccomendations summary dictionary 
+summaries = {
+    'The Budgeter': {}, #ADD AFTER GETTING FLIGHT DATA
+    'The Party Seeker': {
+        'Bali': '',
+        'Phuket': '',
+        'Bangkok': ''
+    }, 
+    'The Beach Relaxer': {
+        'Holetown': '', 
+        'Cancun': '',
+        'Maldives': ''
+    }
+}
+
+#---------------------------------------------------- App UI ----------------------------------------------------------------
+
+#app introduction
+st.title('Holiday Planner App :beach_umbrella:')
+st.write("Welcome to the Holiday Planner App! Get holiday ready with our data and AI-driven destination recommendations. ")
+st.write("To get started, let us know what kind of traveller you are... 👀")
+st.divider()
+
+#customer profile - user input 
+st.header("What type of traveller are you?")
+
+#preference checkboxes 
+profile = st.radio(
+    "Let us know so we can give the best recommendations for you!", 
+    ["The Budgeter", "The Party Seeker", "The Beach Relaxer"],
+    captions=[
+        "Value for money is your priority. You prefer affordable stays and good nightlife without breaking the bank.",
+        "Nightlife is your priority. You prefer warm weather, lots of clubs and bars, and don’t mind travelling the extra mile.",
+        "Nightlife isn’t the priority for you. You prefer sun, warmth, clear skies, and calm conditions."
+    ]
+)
+
+if profile == "The Budgeter": 
+    st.write(f"You have selected: {profile}")
+    st.write("Nice! Who doesn't love a bit of budget-friendly fun. Getting your recommendations ready... :space_invader:")
+if profile == "The Party Seeker": 
+    st.write(f"You have selected: {profile}")
+    st.write("Great Choice! A little partying never hurt anybody. Getting your recommendations ready... :space_invader:")
+if profile == "The Beach Relaxer": 
+    st.write(f"You have selected: {profile}")
+    st.write("Lovely! Time to kick back and relax. Getting your recommendations ready... :space_invader:")
+
 #top recommendations 
 # provide top 3 recommendations based on selected profile
 top_3 = get_top_3(profile)
+
+#export resilts to json file 
+export_results(top_3, profile)
 
 st.subheader(f"🏆 Top Recommendations for: {profile}")
 
 for position, result in enumerate(top_3): 
     medal = ['🥇','🥈','🥉'][position] #medal given based on ranking position
+    destination_name = result['destination_name']
     with st.expander(f"{medal} {result['destination_name']} - Score: {result['score']}/10", expanded=True):
         st.write("##### AI Summary")
         st.container(border=True) #AI summary in here
-        
-
+        if profile in summaries and destination_name in summaries[profile]: 
+            st.info(summaries[profile][destination_name])
+        else: 
+            st.warning('No summary available for this destination.')
 
 #interactive graphs - detailed exploration of destinations 
 st.divider()
