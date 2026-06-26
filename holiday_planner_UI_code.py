@@ -1,16 +1,65 @@
 #import libraries 
-
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go 
-#from destinations_data_merged.ipynb import load_destinations
+import plotly.graph_objects as go  
 
 #import datasets 
-#destinations = load_destinations()
 nightlife_chart = pd.read_csv("data/nightlife/destinations_nightlife_data.csv")
 weather_chart = pd.read_csv("data/weather/destinations_weather_agg_chart.csv")
 #flights_chart = pd.read_csv("data/flights/destinations_flights_agg_chart.csv")
+
+#create destinations dictionary function 
+def load_destinations(): 
+    """
+    Loads, merges, and converts destination CSV files into a 
+    signle destination dictionary 
+    """
+
+    #list of destination files - *ADD FLIGHTS 
+    folders = ['nightlife', 'weather']
+
+    dfs = {} #stores each df under it's folder name  
+
+    #define file path
+    for folder in folders: 
+        file_path = f'data/{folder}/destinations_{folder}_agg.csv'
+        dfs[folder] = pd.read_csv(file_path) #folder: file name
+
+    #merge all dataframes on destination 
+    merged = dfs['nightlife'] #first df to merge on 
+    for folder in list(dfs.keys())[1:]: #locate each file by folder name 
+        merged = merged.merge(dfs[folder], on='destination', how='inner')
+
+
+    #merge validation - check for missing data 
+    expected = 12 #number of destinations 
+    if len(merged) < expected: 
+        missing = expected - len(merged)
+        print(f"Warning: {missing} destination(s) missing from files")
+        print(f"Destinations loaded: {merged['destination'].tolist()}")
+    else: 
+        print(f"Destinations loaded: {merged['destination'].tolist()}")
+
+    #convert merged df to a dictionary for scoring logic 
+    destinations = {}
+    for _, row in merged.iterrows(): #_ ignores the index 
+        destinations[row['destination']] = { #destination name (row value) becomes outer dictionary key
+            #key: row value  
+            #nightlife cols 
+            'country': row['country'], 
+            'averageRating': row['averageRating'], 
+            'totalReviews': row['totalReviews'], 
+            #weather cols
+            'maxTemperature': row['maxTemperature'],
+            'sunshineHours': row['sunshineHours'],
+            'precipitationHours': row['precipitationHours']
+            #- *ADD FLIGHT COLUMNS
+        }
+
+    return destinations
+
+destinations = load_destinations()
 
 #app introduction
 st.title('Holiday Planner App :beach_umbrella:')
@@ -21,55 +70,117 @@ st.divider()
 #customer profile - user input 
 st.header("What type of traveller are you?")
 
-#customer profiles - DICTIONARY 
-
+#customer profiles dictionary - ADD FLIGHT WEIGHTS
+profiles = {
+     '**:money_with_wings: The Budgeter**': {
+         'filters': {
+             #'flightPrice': ('<=', 500)
+             #'flightDuration': ('<=', 6)
+         }, #EDIT FLIGHT FILTERS
+         'weights': {
+             'totalReviews': 0.2, 
+             #'flightPrice': 0.4, 
+             #'flightDuration': 0.4
+         } #EDIT FLIGHT WEIGHTS
+        }, 
+    '**:partying: The Party Seeker**': {
+        'filters': {},
+        'weights': {
+            'averageRating': 0.5, 
+            'totalReviews': 0.2, 
+            'sunshineHours': 0.3
+        }
+    }, 
+    '**:beach_umbrella: The Beach Relaxer**': {
+        'filters': {
+            'sunshineHours': ('>=', 9.5),
+            'maxTemperature': ('>=', 23)
+        },
+        'weights': {
+            'maxTemperature': 0.4, 
+            'sunshineHours': 0.6
+        }
+    }
+}
 
 #preference checkboxes 
 profile = st.radio(
     "Let us know so we can give the best recommendations for you!", 
-    ["**:money_with_wings: The Budgeter**", "**:partying: The Party Seeker**", "**:gem: The Luxury Traveller**", "**:beach_umbrella: The Beach Relaxer**"],
+    ["**:money_with_wings: The Budgeter**", "**:partying: The Party Seeker**", "**:beach_umbrella: The Beach Relaxer**"],
     captions=[
         "Value for money is your priority. You prefer affordable stays and good nightlife without breaking the bank.",
         "Nightlife is your priority. You prefer warm weather, lots of clubs and bars, and don’t mind travelling the extra mile.",
-        "Comfort and exclusivity are your priority. You prefer fine dining, high-end hotels, and warm and clear weather.",
         "Nightlife isn’t the priority for you. You prefer sun, warmth, clear skies, and calm conditions."
     ]
 )
 
-#destination score calculator - 
+if profile == "**:money_with_wings: The Budgeter**": 
+    st.write(f"You have selected: {profile}")
+    st.write("Nice! Who doesn't love a bit of budget-friendly fun. Getting your recommendations ready... :space_invader:")
+if profile == "**:partying: The Party Seeker**": 
+    st.write(f"You have selected: {profile}")
+    st.write("Great Choice! A little partying never hurt anybody. Getting your recommendations ready... :space_invader:")
+if profile == "**:beach_umbrella: The Beach Relaxer**": 
+    st.write(f"You have selected: {profile}")
+    st.write("Lovely! Time to kick back and relax. Getting your recommendations ready... :space_invader:")
 
+#destination score calculator  
+def get_top_3(profile): 
+    profile = profiles[profile] #extracts the full dictionary for selected profile
+    pot_dests = [] #empty list of potential destinations 
 
-if profile == "**profile1**": 
-    st.write(f"You have selected: {profile}")
-    st.write("Nice! Who doesn't need a bit of... Your recommendations are ready!")
-if profile == "**profile2**": 
-    st.write(f"You have selected: {profile}")
-    st.write("Nice! Who doesn't need a bit of... Your recommendations are ready!")
-if profile == "**profile3**": 
-    st.write(f"You have selected: {profile}")
-    st.write("Nice! Who doesn't need a bit of... Your recommendations are ready!")
-if profile == "**profile4**": 
-    st.write(f"You have selected: {profile}")
-    st.write("Nice! Who doesn't need a bit of... Your recommendations are ready!")
+    for dest, metrics in destinations.items(): #key(dest): values(metrics - dict)
+        #apply filters first 
+        eligible = True #destinations considered 
+        for metric, (operator, threshold) in profile['filters'].items(): #checks through each filter
+            value = metrics[metric] 
+            if operator == '<=' and value > threshold:
+                eligible = False #eliminates destination from consideration set
+            elif operator == '>=' and value < threshold: 
+                eligible = False
+        if not eligible: 
+            continue #moves on to next destination 
 
-st.subheader("Top Recommendations:")
+        #score destinations 
+        score = 0.0 
+        weights = profile['weights']
+
+        #metrics where lower is better 
+        lower_better = ['flightPrice','flightDuration']
+
+        #score destinations based on weights         
+        for metric, weight in weights.items():
+            #list of all destination metric values for each metric 
+            all_values = [metrics[metric] for metrics in destinations.values()]
+
+            #normalise metric values 
+            min_v, max_v = min(all_values), max(all_values)
+            norm_v = (metrics[metric] - min_v) / (max_v - min_v) 
+
+            if metric in lower_better: 
+                norm_v = 1 - norm_v #flips score so lower values score higher
+
+            #score updates every iteration 
+            score += weight * norm_v #prioritises metrics with higher weights 
+
+        pot_dests.append({'destination_name':dest, 'data': metrics, 'score': round(score * 10,2)})
+
+    #return the top 3 destinations by score desc 
+    return sorted(pot_dests, key=lambda x: x['score'], reverse=True)[:3]
 
 #top recommendations 
 # provide top 3 recommendations based on selected profile
-#copy profile selection if code to set recommendation conditions
+top_3 = get_top_3(profile)
 
-#design - numbered boxes + name + desc + map/picture 
+st.subheader(f"🏆 Top Recommendations for: {profile}")
 
-cols = st.columns(3) 
+for position, result in enumerate(top_3): 
+    medal = ['🥇','🥈','🥉'][position] #medal given based on ranking position
+    with st.expander(f"{medal} {result['destination_name']} - Score: {result['score']}/10", expanded=True):
+        st.write("##### AI Summary")
+        st.container(border=True) #AI summary in here
+        
 
-#for loop to create containiners with image, name and description 
-for col in cols: 
-    with col:
-        st.container(border=True)
-
-#LLM 
-st.write("##### AI Summary")
-st.container(border=True) #AI summary in here
 
 #interactive graphs - detailed exploration of destinations 
 st.divider()
