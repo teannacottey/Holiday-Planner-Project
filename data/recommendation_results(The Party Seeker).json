@@ -1,0 +1,41 @@
+{
+    "profile": "The Party Seeker",
+    "recommendations": [
+        {
+            "destination": "Bali",
+            "score": 7.48,
+            "data": {
+                "country": "Indonesia",
+                "averageRating": 4.76,
+                "totalReviews": 13089.0,
+                "maxTemperature": 27.1,
+                "sunshineHours": 10.1,
+                "precipitationHours": 9.3
+            }
+        },
+        {
+            "destination": "Phuket",
+            "score": 6.78,
+            "data": {
+                "country": "Thailand",
+                "averageRating": 4.79,
+                "totalReviews": 23371.0,
+                "maxTemperature": 29.7,
+                "sunshineHours": 8.7,
+                "precipitationHours": 8.9
+            }
+        },
+        {
+            "destination": "Bangkok",
+            "score": 6.71,
+            "data": {
+                "country": "Thailand",
+                "averageRating": 4.81,
+                "totalReviews": 10112.0,
+                "maxTemperature": 31.3,
+                "sunshineHours": 9.1,
+                "precipitationHours": 5.5
+            }
+        }
+    ]
+}

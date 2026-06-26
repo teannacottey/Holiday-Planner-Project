@@ -1,0 +1,41 @@
+{
+    "profile": "The Budgeter",
+    "recommendations": [
+        {
+            "destination": "Miami",
+            "score": 2.0,
+            "data": {
+                "country": "USA",
+                "averageRating": 4.41,
+                "totalReviews": 34879.0,
+                "maxTemperature": 27.8,
+                "sunshineHours": 9.6,
+                "precipitationHours": 6.4
+            }
+        },
+        {
+            "destination": "Mykonos",
+            "score": 1.87,
+            "data": {
+                "country": "Greece",
+                "averageRating": 4.4,
+                "totalReviews": 32715.0,
+                "maxTemperature": 21.1,
+                "sunshineHours": 9.4,
+                "precipitationHours": 1.8
+            }
+        },
+        {
+            "destination": "Phuket",
+            "score": 1.31,
+            "data": {
+                "country": "Thailand",
+                "averageRating": 4.79,
+                "totalReviews": 23371.0,
+                "maxTemperature": 29.7,
+                "sunshineHours": 8.7,
+                "precipitationHours": 8.9
+            }
+        }
+    ]
+}

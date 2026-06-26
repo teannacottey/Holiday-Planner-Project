@@ -163,14 +163,31 @@ def export_results(top_3, profile):
 summaries = {
     'The Budgeter': {}, #ADD AFTER GETTING FLIGHT DATA
     'The Party Seeker': {
-        'Bali': '',
-        'Phuket': '',
-        'Bangkok': ''
+        'Bali': """Bali's nightlife is rated an exceptional 4.76 across 13,089 reviews, making it the most consistently praised party destination in your top 3. 
+        However, September to December overlaps with Bali's rainy season, and the 9.3 average daily precipitation hours are the highest of your recommendations — 
+        so expect tropical downpours alongside the nightlife. The good news is that Bali's club and bar scene is largely indoors, meaning the rain rarely puts a 
+        dampener on the evening.""",
+        'Phuket': """With 23,371 nightlife reviews and a rating of 4.79, Phuket is one of the most tried and tested party destinations on the planet. 
+                    September to November falls within Phuket's monsoon season, and 8.9 average daily precipitation hours reflect that — so daytime beach plans 
+                    may need flexibility. Once the sun goes down however, Patong's legendary nightlife strip operates in full swing regardless of the weather.""",
+        'Bangkok': """Bangkok holds the highest nightlife rating of your top 3 at 4.81 across 10,112 reviews and is comfortably the driest option at just 5.5 average 
+                    daily precipitation hours — making it the most weather-resilient choice during the September to December rainy season. At 31.3°C it's also the warmest, 
+                    and with Bangkok's nightlife being almost entirely indoors across rooftop bars, clubs, and entertainment districts, the seasonal rain has minimal 
+                    impact on your experience."""
     }, 
     'The Beach Relaxer': {
-        'Holetown': '', 
-        'Cancun': '',
-        'Maldives': ''
+        'Holetown': """Holetown earns its top spot with the highest daily maximum temperature of your top 3 at 31.1°C and an impressive 10.6 average sunshine hours 
+                    per day. It's worth noting that Barbados sits within the Caribbean rainy season between September and December, reflected in the 7.2 average daily 
+                    precipitation hours — however the rain here typically comes in short sharp bursts rather than all-day downpours, leaving plenty of beach time. 
+                    For a beach relaxer, this remains your strongest recommendation.""", 
+        'Cancun': """ Cancún is your safest bet for beach weather during the September to December travel window, averaging the lowest daily precipitation hours 
+                    of your top 3 at just 5.8 alongside 10.2 sunshine hours and a warm 29.5°C. While Mexico's Caribbean coast does experience its rainy season 
+                    during this period, Cancún's figures suggest more consistent sunshine than your other recommendations. If avoiding rain is a priority, 
+                    this is your most reliable option.""",
+        'Maldives': """The Maldives offers a comfortable 28.6°C and 10.3 daily sunshine hours, but it's important to flag that September to December falls within 
+                    the Maldivian wet season, which is reflected in the 7.0 average daily precipitation hours. Rain typically arrives in short tropical bursts rather 
+                    than prolonged periods, so beach time is still very much on the cards. The unrivalled quality of the beaches and waters makes it worth considering 
+                    despite the seasonal weather."""
     }
 }
 
@@ -220,11 +237,11 @@ for position, result in enumerate(top_3):
     destination_name = result['destination_name']
     with st.expander(f"{medal} {result['destination_name']} - Score: {result['score']}/10", expanded=True):
         st.write("##### AI Summary")
-        st.container(border=True) #AI summary in here
-        if profile in summaries and destination_name in summaries[profile]: 
-            st.info(summaries[profile][destination_name])
-        else: 
-            st.warning('No summary available for this destination.')
+        with st.container(border=True): #AI summary in here
+            if profile in summaries and destination_name in summaries[profile]: 
+                st.info(summaries[profile][destination_name])
+            else: 
+                st.warning('No summary available for this destination.')
 
 #interactive graphs - detailed exploration of destinations 
 st.divider()
