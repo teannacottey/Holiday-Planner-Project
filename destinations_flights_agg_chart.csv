@@ -1,4 +1,4 @@
-destination,country,month,origin_airport,arrival_airport,arrival_airport_name,airport_used_type,average_price_gbp,cheapest_price_gbp,highest_price_gbp,average_duration_minutes,average_duration_hours,average_stops,flight_options_count,estimated_rows_count
+destination,month,origin_airport,arrival_airport,arrival_airport_name,airport_used_type,average_price_gbp,cheapest_price_gbp,highest_price_gbp,average_duration_minutes,average_duration_hours,average_stops,flight_options_count,estimated_rows_count
 Bali,Indonesia,Sep,LHR,DPS,Ngurah Rai International Airport,Exact,873.0,785.0,1025.0,1156.67,19.28,1.0,3,0
 Bali,Indonesia,Oct,LHR,DPS,Ngurah Rai International Airport,Exact,845.0,845.0,845.0,1180.0,19.67,1.0,1,1
 Bali,Indonesia,Nov,LHR,DPS,Ngurah Rai International Airport,Exact,875.0,875.0,875.0,1192.0,19.86,1.0,1,1
