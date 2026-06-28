@@ -10,7 +10,9 @@
                 "totalReviews": 13089.0,
                 "maxTemperature": 27.1,
                 "sunshineHours": 10.1,
-                "precipitationHours": 9.3
+                "precipitationHours": 9.3,
+                "flightPrice": 914.5,
+                "flightDuration": 19.76
             }
         },
         {
@@ -22,7 +24,9 @@
                 "totalReviews": 23371.0,
                 "maxTemperature": 29.7,
                 "sunshineHours": 8.7,
-                "precipitationHours": 8.9
+                "precipitationHours": 8.9,
+                "flightPrice": 727.5,
+                "flightDuration": 16.74
             }
         },
         {
@@ -34,7 +38,9 @@
                 "totalReviews": 10112.0,
                 "maxTemperature": 31.3,
                 "sunshineHours": 9.1,
-                "precipitationHours": 5.5
+                "precipitationHours": 5.5,
+                "flightPrice": 681.42,
+                "flightDuration": 15.66
             }
         }
     ]

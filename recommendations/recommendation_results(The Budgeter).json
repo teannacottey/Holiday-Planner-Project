@@ -1,0 +1,47 @@
+{
+    "profile": "The Budgeter",
+    "recommendations": [
+        {
+            "destination": "Dubrovnik",
+            "score": 7.46,
+            "data": {
+                "country": "Croatia",
+                "averageRating": 4.55,
+                "totalReviews": 9507.0,
+                "maxTemperature": 19.1,
+                "sunshineHours": 8.1,
+                "precipitationHours": 4.0,
+                "flightPrice": 190.88,
+                "flightDuration": 4.72
+            }
+        },
+        {
+            "destination": "Ibiza",
+            "score": 6.35,
+            "data": {
+                "country": "Spain",
+                "averageRating": 4.45,
+                "totalReviews": 16014.0,
+                "maxTemperature": 21.4,
+                "sunshineHours": 9.1,
+                "precipitationHours": 2.7,
+                "flightPrice": 203.44,
+                "flightDuration": 5.3
+            }
+        },
+        {
+            "destination": "Mykonos",
+            "score": 5.66,
+            "data": {
+                "country": "Greece",
+                "averageRating": 4.4,
+                "totalReviews": 32715.0,
+                "maxTemperature": 21.1,
+                "sunshineHours": 9.4,
+                "precipitationHours": 1.8,
+                "flightPrice": 266.5,
+                "flightDuration": 4.68
+            }
+        }
+    ]
+}
